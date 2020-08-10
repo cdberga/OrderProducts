@@ -9,29 +9,22 @@ import org.hibernate.service.ServiceRegistry;
 public class HibernateUtil {
 
 	private static SessionFactory sessionFactory;
-	private Session session;
-	
-	private static SessionFactory getSessionFactory() {
-		if(sessionFactory == null) {
-			// loads configurations and mappings
-			Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
-			ServiceRegistry serviceRegistry = 
-					new StandardServiceRegistryBuilder().applySettings(
-						configuration.getProperties()).build();
-			
-			// builds a session factory from the service registry
-			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		}
 
-		return sessionFactory;
+	static {
+		// loads configurations and mappings
+		Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(configuration.getProperties()).build();
+
+		// builds a session factory from the service registry
+		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}
-	
-	public Session getNewSession() {
-		session = getSessionFactory().openSession();
-		return session;
+
+	public static Session getSession() {
+		return sessionFactory.openSession();
 	}
-	
-	public void closeSession() {
-		session.close();
+
+	public static void closeSession(Session s) {
+		s.close();
 	}
 }

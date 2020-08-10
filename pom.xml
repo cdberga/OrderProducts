@@ -36,7 +36,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.berga.authorbooks.AuthorBooks</mainClass>
+							<mainClass>com.berga.orderproducts.OrderProducts</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
