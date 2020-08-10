@@ -11,16 +11,17 @@ import com.berga.orderproducts.util.HibernateUtil;
 
 public class OrderProductsRepository {
 
-	HibernateUtil util;
+	HibernateUtil util = new HibernateUtil();
 
 	public void findAllCategories() {
 		Session session = util.getNewSession();
 		String hql = "from Category";
-		Query query = session.createQuery(hql);
+		Query query = session.createQuery(hql, Category.class);
 		List<Category> categories = query.getResultList();
 		
 		for(Category category : categories) {
 			System.out.println(category.getName());
 		}
+		util.closeSession();
 	}
 }

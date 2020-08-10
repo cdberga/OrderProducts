@@ -10,7 +10,9 @@
 		<property name="hibernate.connection.password"></property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="show_sql">true</property>
-		<mapping
-			class="com.berga.orderproducts.util.HibernateUtil" />
+		<property name="hbm2ddl.auto">validate</property>
+		<mapping class="com.berga.orderproducts.model.Category" />
+		<mapping class="com.berga.orderproducts.model.Product" />
+		<mapping class="com.berga.orderproducts.model.Order" />
 	</session-factory>
 </hibernate-configuration>
