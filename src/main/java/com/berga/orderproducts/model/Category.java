@@ -47,4 +47,8 @@ public class Category {
 	public Set<Product> getProducts() {
 		return products;
 	}
+	
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
 }
