@@ -14,12 +14,18 @@ public class OrderProductsRepository {
 	public void findAllCategories() {
 		Session session = HibernateUtil.getSession();
 		String hql = "from Category";
-		Query query = session.createQuery(hql, Category.class);
+		Query query = session.createQuery(hql);
 		List<Category> categories = query.getResultList();
 		
 		for(Category category : categories) {
 			System.out.println(category.getName());
 		}
+		HibernateUtil.closeSession(session);
+	}
+	
+	public void insertCategory(Integer id, String name) {
+		Session session = HibernateUtil.getSession();
+		session.save(new Category(name));
 		HibernateUtil.closeSession(session);
 	}
 }
