@@ -48,6 +48,16 @@ public class OrderProductsRepository {
 		}
 	}
 	
+	public Category findCategory(String name) {
+		Session session = HibernateUtil.getSession();
+		String hql = "from Category where name = :name";
+		Query query = session.createQuery(hql);
+		query.setParameter("name", name);
+		Category category = (Category) query.getSingleResult();
+		HibernateUtil.closeSession(session);
+		return category;
+	}
+	
 	/*
 	 * Product
 	 */
@@ -62,13 +72,15 @@ public class OrderProductsRepository {
 	
 	public void findProductsByCategoryName(String name) {
 		Session session = HibernateUtil.getSession();
-		String hql = "from Product where Category.name = :category";
+		String hql = "from Product p join p.category c where c.name = :category";
 		Query query = session.createQuery(hql);
 		query.setParameter("category", name);
 
-		List<Product> products = query.getResultList();
-		for (Product product : products) {
-			System.out.println(product.getName());
+		List<Object[]> items = query.getResultList();
+		for(Object []row : items) {
+			Product p = (Product) row[0];
+			Category c = (Category) row[1];
+			System.out.println("Product: " + p.getName() + " - Category: " + c.getName());
 		}
 		HibernateUtil.closeSession(session);
 	}
@@ -113,5 +125,7 @@ public class OrderProductsRepository {
 			Category c = (Category) row[1];
 			System.out.println("Product: " + p.getName() + " - Category: " + c.getName());
 		}
+		HibernateUtil.closeSession(session);
 	}
+
 }
