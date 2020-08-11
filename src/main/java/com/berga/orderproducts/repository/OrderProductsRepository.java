@@ -12,6 +12,9 @@ import com.berga.orderproducts.util.HibernateUtil;
 
 public class OrderProductsRepository {
 
+	/*
+	 * Category
+	 */
 	public void findAllCategories() {
 		Session session = HibernateUtil.getSession();
 		String hql = "from Category";
@@ -28,6 +31,31 @@ public class OrderProductsRepository {
 		Session session = HibernateUtil.getSession();
 		session.beginTransaction();
 		session.save(new Category(name));
+		session.getTransaction().commit();
+		HibernateUtil.closeSession(session);
+	}
+	
+	public void deleteCategory(Integer id) {
+		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
+		String hql = "delete from Category where CATEGORY_ID = :id";
+		Query query = session.createQuery(hql);
+		query.setParameter("id", id);
+		
+		int rowsAffected = query.executeUpdate();
+		if(rowsAffected > 0 ) {
+			System.out.println("Deleted " + rowsAffected + " rows.");
+		}
+	}
+	
+	/*
+	 * Product
+	 */
+	
+	public void insertProduct(Product p) {
+		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
+		session.save(p);
 		session.getTransaction().commit();
 		HibernateUtil.closeSession(session);
 	}
@@ -60,6 +88,7 @@ public class OrderProductsRepository {
 	
 	public void updateProduct(Product p) {
 		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
 		String hql = "update Product set price = :price where id=:id";
 		Query query = session.createQuery(hql);
 		query.setParameter("price", p.getPrice());
@@ -68,6 +97,21 @@ public class OrderProductsRepository {
 		if(rowsAffected > 0 ) {
 			System.out.println(rowsAffected + " Products updated.");
 		}
+		session.getTransaction().commit();	
 		HibernateUtil.closeSession(session);
+	}
+	
+	private void findProductsAndCategories() {
+		Session session = HibernateUtil.getSession();
+		String hql = "from Product p inner join p.category";
+		Query query = session.createQuery(hql);
+
+		List<Object[]> listResult = query.getResultList();
+		
+		for(Object []row : listResult) {
+			Product p = (Product) row[0];
+			Category c = (Category) row[1];
+			System.out.println("Product: " + p.getName() + " - Category: " + c.getName());
+		}
 	}
 }
