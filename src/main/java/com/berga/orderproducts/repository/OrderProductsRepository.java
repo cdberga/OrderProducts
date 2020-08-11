@@ -26,7 +26,9 @@ public class OrderProductsRepository {
 	
 	public void insertCategory(Integer id, String name) {
 		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
 		session.save(new Category(name));
+		session.getTransaction().commit();
 		HibernateUtil.closeSession(session);
 	}
 	
