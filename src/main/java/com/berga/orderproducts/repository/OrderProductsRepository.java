@@ -58,13 +58,10 @@ public class OrderProductsRepository {
 		}
 	}
 	
-	public void findProductsByDescription(String desc) {
+	public List<Product> findProductsByDescription(String desc) {
 		String hql = "from Product where description like :description";
 		
-		List<Product> products = DaoUtil.queryList(hql, "description", "%" + desc + "%");
-		for (Product product : products) {
-			System.out.println(product.getName());
-		}
+		return DaoUtil.queryList(hql, "description", "%" + desc + "%");
 	}
 	
 	public void updateProduct(Product p) {
@@ -75,7 +72,7 @@ public class OrderProductsRepository {
 		}
 	}
 	
-	private void findProductsAndCategories() {
+	public void findProductsAndCategories() {
 		String hql = "from Product p inner join p.category";
 
 		List<Object[]> listResult = DaoUtil.queryList(hql);
