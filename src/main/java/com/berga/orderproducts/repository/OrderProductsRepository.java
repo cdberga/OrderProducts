@@ -8,6 +8,7 @@ import org.hibernate.Session;
 
 import com.berga.orderproducts.model.Category;
 import com.berga.orderproducts.model.Product;
+import com.berga.orderproducts.util.DaoUtil;
 import com.berga.orderproducts.util.HibernateUtil;
 
 public class OrderProductsRepository {
@@ -28,7 +29,7 @@ public class OrderProductsRepository {
 	}
 	
 	public void insertCategory(Integer id, String name) {
-		HibernateUtil.executeUpdate(new Category(name));
+		DaoUtil.executeUpdate(new Category(name));
 	}
 	
 	public void deleteCategory(Integer id) {
@@ -61,7 +62,7 @@ public class OrderProductsRepository {
 	 */
 	
 	public void insertProduct(Product p) {
-		HibernateUtil.executeUpdate(p);
+		DaoUtil.executeUpdate(p);
 	}
 	
 	public void findProductsByCategoryName(String name) {
@@ -94,7 +95,7 @@ public class OrderProductsRepository {
 	
 	public void updateProduct(Product p) {
 		String hql = "update Product set price = :price where id=:id";
-		int rowsAffected = HibernateUtil.executeUpdate(hql, "price", p.getPrice(), "id", p.getId());
+		int rowsAffected = DaoUtil.executeUpdate(hql, "price", p.getPrice(), "id", p.getId());
 		if(rowsAffected > 0 ) {
 			System.out.println(rowsAffected + " Products updated.");
 		}
