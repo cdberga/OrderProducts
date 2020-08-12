@@ -18,5 +18,8 @@ public class OrderProducts {
 		order.repo.insertProduct(p);
 		order.repo.findAllCategories();
 		order.repo.findProductsByCategoryName("Vegetables");
+		int idCat = order.repo.findCategory("Meats").getId();
+		order.repo.deleteCategory(idCat);
+		order.repo.findAllCategories();
 	}
 }

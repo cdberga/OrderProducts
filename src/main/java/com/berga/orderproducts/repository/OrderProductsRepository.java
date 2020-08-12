@@ -28,28 +28,15 @@ public class OrderProductsRepository {
 	}
 	
 	public void deleteCategory(Integer id) {
-		Session session = HibernateUtil.getSession();
-		session.beginTransaction();
 		String hql = "delete from Category where CATEGORY_ID = :id";
-		Query query = session.createQuery(hql);
-		query.setParameter("id", id);
-		
-		int rowsAffected = query.executeUpdate();
+		int rowsAffected = DaoUtil.executeUpdate(hql, "id", id);
 		if(rowsAffected > 0 ) {
 			System.out.println("Deleted " + rowsAffected + " rows.");
 		}
-		session.getTransaction().commit();
-		HibernateUtil.closeSession(session);
 	}
 	
 	public Category findCategory(String name) {
-		Session session = HibernateUtil.getSession();
-		String hql = "from Category where name = :name";
-		Query query = session.createQuery(hql);
-		query.setParameter("name", name);
-		Category category = (Category) query.getSingleResult();
-		HibernateUtil.closeSession(session);
-		return category;
+		return (Category) DaoUtil.queryList("from Category where name = :name", "name", name).get(0);
 	}
 	
 	/*
@@ -61,31 +48,23 @@ public class OrderProductsRepository {
 	}
 	
 	public void findProductsByCategoryName(String name) {
-		Session session = HibernateUtil.getSession();
 		String hql = "from Product p join p.category c where c.name = :category";
-		Query query = session.createQuery(hql);
-		query.setParameter("category", name);
 
-		List<Object[]> items = query.getResultList();
+		List<Object[]> items = DaoUtil.queryList(hql, "category", name);
 		for(Object []row : items) {
 			Product p = (Product) row[0];
 			Category c = (Category) row[1];
 			System.out.println("Product: " + p.getName() + " - Category: " + c.getName());
 		}
-		HibernateUtil.closeSession(session);
 	}
 	
 	public void findProductsByDescription(String desc) {
-		Session session = HibernateUtil.getSession();
 		String hql = "from Product where description like :description";
-		Query query = session.createQuery(hql);
-		query.setParameter("description", "%" + desc + "%");
 		
-		List<Product> products = query.getResultList();
+		List<Product> products = DaoUtil.queryList(hql, "description", "%" + desc + "%");
 		for (Product product : products) {
 			System.out.println(product.getName());
 		}
-		HibernateUtil.closeSession(session);
 	}
 	
 	public void updateProduct(Product p) {
@@ -97,18 +76,15 @@ public class OrderProductsRepository {
 	}
 	
 	private void findProductsAndCategories() {
-		Session session = HibernateUtil.getSession();
 		String hql = "from Product p inner join p.category";
-		Query query = session.createQuery(hql);
 
-		List<Object[]> listResult = query.getResultList();
+		List<Object[]> listResult = DaoUtil.queryList(hql);
 		
 		for(Object []row : listResult) {
 			Product p = (Product) row[0];
 			Category c = (Category) row[1];
 			System.out.println("Product: " + p.getName() + " - Category: " + c.getName());
 		}
-		HibernateUtil.closeSession(session);
 	}
 
 }
