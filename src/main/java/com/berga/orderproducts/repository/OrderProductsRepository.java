@@ -18,8 +18,9 @@ public class OrderProductsRepository {
 	 */
 	public void findAllCategories() {
 		List<Category> categories = DaoUtil.queryList("from Category");
+		System.out.println("Categories");
 		for(Category category : categories) {
-			System.out.println(category.getName());
+			System.out.println("  " + category.getName());
 		}
 	}
 	
@@ -31,7 +32,7 @@ public class OrderProductsRepository {
 		String hql = "delete from Category where CATEGORY_ID = :id";
 		int rowsAffected = DaoUtil.executeUpdate(hql, "id", id);
 		if(rowsAffected > 0 ) {
-			System.out.println("Deleted " + rowsAffected + " rows.");
+			System.out.println("Deleted " + rowsAffected + " categories.");
 		}
 	}
 	
