@@ -17,15 +17,10 @@ public class OrderProductsRepository {
 	 * Category
 	 */
 	public void findAllCategories() {
-		Session session = HibernateUtil.getSession();
-		String hql = "from Category";
-		Query query = session.createQuery(hql);
-		List<Category> categories = query.getResultList();
-		
+		List<Category> categories = DaoUtil.queryList("from Category");
 		for(Category category : categories) {
 			System.out.println(category.getName());
 		}
-		HibernateUtil.closeSession(session);
 	}
 	
 	public void insertCategory(Integer id, String name) {
