@@ -28,11 +28,7 @@ public class OrderProductsRepository {
 	}
 	
 	public void insertCategory(Integer id, String name) {
-		Session session = HibernateUtil.getSession();
-		session.beginTransaction();
-		session.save(new Category(name));
-		session.getTransaction().commit();
-		HibernateUtil.closeSession(session);
+		HibernateUtil.executeUpdate(new Category(name));
 	}
 	
 	public void deleteCategory(Integer id) {
@@ -46,6 +42,8 @@ public class OrderProductsRepository {
 		if(rowsAffected > 0 ) {
 			System.out.println("Deleted " + rowsAffected + " rows.");
 		}
+		session.getTransaction().commit();
+		HibernateUtil.closeSession(session);
 	}
 	
 	public Category findCategory(String name) {
@@ -63,11 +61,7 @@ public class OrderProductsRepository {
 	 */
 	
 	public void insertProduct(Product p) {
-		Session session = HibernateUtil.getSession();
-		session.beginTransaction();
-		session.save(p);
-		session.getTransaction().commit();
-		HibernateUtil.closeSession(session);
+		HibernateUtil.executeUpdate(p);
 	}
 	
 	public void findProductsByCategoryName(String name) {
@@ -99,18 +93,11 @@ public class OrderProductsRepository {
 	}
 	
 	public void updateProduct(Product p) {
-		Session session = HibernateUtil.getSession();
-		session.beginTransaction();
 		String hql = "update Product set price = :price where id=:id";
-		Query query = session.createQuery(hql);
-		query.setParameter("price", p.getPrice());
-		query.setParameter("id", p.getId());
-		int rowsAffected = query.executeUpdate();
+		int rowsAffected = HibernateUtil.executeUpdate(hql, "price", p.getPrice(), "id", p.getId());
 		if(rowsAffected > 0 ) {
 			System.out.println(rowsAffected + " Products updated.");
 		}
-		session.getTransaction().commit();	
-		HibernateUtil.closeSession(session);
 	}
 	
 	private void findProductsAndCategories() {
